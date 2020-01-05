@@ -9,11 +9,19 @@
         android:id="@+id/mainFragment"
         android:name="com.zubala.rafal.glucose.ui.main.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/main_fragment"/>
+        tools:layout="@layout/main_fragment">
+        <argument
+            android:name="accountData"
+            app:argType="com.zubala.rafal.glucose.ui.signin.AccountData" />
+    </fragment>
 
     <fragment
         android:id="@+id/signinFragment"
         android:name="com.zubala.rafal.glucose.ui.signin.SigninFragment"
-        android:label="SigninFragment" />
+        android:label="SigninFragment" >
+        <action
+            android:id="@+id/action_pass_account"
+            app:destination="@id/mainFragment" />
+    </fragment>
 
 </navigation>

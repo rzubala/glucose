@@ -29,6 +29,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -50,6 +54,15 @@ dependencies {
 
     //play service auth
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+
+    //google sheets
+    implementation('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-sheets:v4-rev516-1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

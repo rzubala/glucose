@@ -1,15 +1,14 @@
 package com.zubala.rafal.glucose.ui.signin
 
-import android.accounts.Account
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
@@ -44,11 +43,10 @@ class SigninFragment : Fragment() {
             startActivityForResult(mGoogleSignInClient.signInIntent, RC_SIGN_IN)
         } else {
             // use the already signed in account
-            val account = GoogleSignIn.getLastSignedInAccount(context)?.account
-            Log.i("SigninFragment", "already signed: ${account?.name}")
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            Log.i("SigninFragment", "already signed: ${account?.account?.name}")
+            this.findNavController().navigate(SigninFragmentDirections.actionPassAccount(AccountData(account!!)))
         }
-
-
         return binding.root
     }
 
@@ -59,7 +57,8 @@ class SigninFragment : Fragment() {
             try {
                 //val account = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException::class.java)?.account
                 val account = task.getResult(ApiException::class.java)
-                Log.i("SigninFragment", "Signed: ${account?.toString()}")
+                Log.i("SigninFragment", "Signed: ${account?.account?.name}")
+                this.findNavController().navigate(SigninFragmentDirections.actionPassAccount(AccountData(account!!)))
             } catch (e: ApiException) {
                 Log.w("SigninFragment", "signInResult: failed code=" + e.statusCode + ", reason: " + GoogleSignInStatusCodes.getStatusCodeString(e.statusCode), e)
             }
