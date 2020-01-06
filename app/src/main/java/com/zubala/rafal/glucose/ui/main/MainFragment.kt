@@ -61,7 +61,8 @@ class MainFragment : Fragment() {
         viewModel.snackbarEvent.observe(this, androidx.lifecycle.Observer {
             if (it.isNotEmpty()) {
                 viewModel.snackbarDone()
-                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, "$it", Snackbar.LENGTH_LONG)
+                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!,
+                    it, Snackbar.LENGTH_LONG)
                 snack.show()
                 binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
                 hideKeyboard()
