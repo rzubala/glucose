@@ -27,9 +27,9 @@ class MainFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
 
         viewModel.addMeasurementsEvent.observe(this, androidx.lifecycle.Observer {
-            viewModel.doneSubmit()
             if (it) {
                 viewModel.sendMeasurements(binding.glucoseMeasurement.text.toString())
+                viewModel.doneSubmit()
             }
         })
 
