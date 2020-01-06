@@ -34,8 +34,10 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
     fun sendMeasurements(data: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.i("ViewModel", "sendMeasurements")
-                sheetsService.test(sheets, data)
+                val row = sheetsService.getRowByDate(sheets)
+                if (row > 0) {
+                    sheetsService.insertValue(sheets, row, data)
+                }
             }
         }
     }
