@@ -26,9 +26,29 @@ class MainFragment : Fragment() {
         val viewModelFactory = MainViewModelFactory(openSheet(arguments.accountData))
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
 
+        binding.radioGroup.check(binding.onEmpty.id)
+
         viewModel.addMeasurementsEvent.observe(this, androidx.lifecycle.Observer {
             if (it) {
-                viewModel.sendMeasurements(binding.glucoseMeasurement.text.toString())
+                val checked = binding.radioGroup.checkedRadioButtonId
+                val type: Type? = when {
+                    binding.onEmpty.id == checked -> {
+                        Type.ON_EMPTY
+                    }
+                    binding.breakfast.id == checked -> {
+                        Type.BREAKFAST
+                    }
+                    binding.dinner.id == checked -> {
+                        Type.DINNER
+                    }
+                    binding.supper.id == checked -> {
+                        Type.SUPPER
+                    }
+                    else -> null
+                }
+                type?.let {
+                    viewModel.sendMeasurements(binding.glucoseMeasurement.text.toString(), type)
+                }
                 viewModel.doneSubmit()
             }
         })

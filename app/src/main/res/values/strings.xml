@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Glucose</string>
     <string name="submit">Submit</string>
+    <string name="on_empty_stomach">On empty stomach</string>
+    <string name="_1_hour_after_breakfast">1 hour after breakfast</string>
+    <string name="_1_hour_after_dinner">1 hour after dinner</string>
+    <string name="_1_hour_after_supper">1 hour after supper</string>
 </resources>

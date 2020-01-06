@@ -31,14 +31,16 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
         _addMeasurementsEvent.value = false
     }
 
-    fun sendMeasurements(data: String) {
+    fun sendMeasurements(data: String, type: Type) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val row = sheetsService.getRowByDate(sheets)
                 if (row > 0) {
-                    sheetsService.insertValue(sheets, row, data)
+                    sheetsService.insertValue(sheets, row, data, type)
                 }
             }
         }
     }
 }
+
+enum class Type {ON_EMPTY, BREAKFAST, DINNER, SUPPER}

@@ -7,6 +7,7 @@ import com.google.api.services.sheets.v4.model.UpdateValuesResponse
 import com.google.api.services.sheets.v4.model.ValueRange
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.logic.toString
+import com.zubala.rafal.glucose.ui.main.Type
 import java.io.IOException
 
 
@@ -43,13 +44,13 @@ class SpreadSheetService {
         return -1
     }
 
-    fun insertValue(sheets: Sheets, row: Int, data: String) {
+    fun insertValue(sheets: Sheets, row: Int, data: String, type: Type) {
         val date = getCurrentDateTime()
-        val timeString = date.toString("hh:mm")
+        val timeString = date.toString("HH:mm")
         try {
             val values: MutableList<List<Any>> = MutableList(1) { listOf(timeString, data) }
             val body: ValueRange = ValueRange().setValues(values)
-            val range = toRange("B", "C", row, row)
+            val range = getRange(type, row)
             val result: UpdateValuesResponse = sheets.spreadsheets().values().update(SPREADSHEET_ID, range, body)
                     .setValueInputOption(VALUE_INPUT_OPTION)
                     .execute()
@@ -58,6 +59,23 @@ class SpreadSheetService {
             Log.e("SpreadSheetService", "UserRecoverableAuthIOException", ex)
         } catch (e: IOException) {
             Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+        }
+    }
+
+    private fun getRange(type: Type, row: Int): String {
+        return when (type) {
+            Type.ON_EMPTY -> {
+                toRange("B", "C", row, row)
+            }
+            Type.BREAKFAST -> {
+                toRange("D", "E", row, row)
+            }
+            Type.DINNER -> {
+                toRange("F", "G", row, row)
+            }
+            Type.SUPPER -> {
+                toRange("H", "I", row, row)
+            }
         }
     }
 
