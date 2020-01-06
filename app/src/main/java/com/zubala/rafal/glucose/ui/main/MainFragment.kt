@@ -71,7 +71,6 @@ class MainFragment : Fragment() {
         binding.mainModel = viewModel
         binding.lifecycleOwner = this
 
-
         return binding.root
     }
 

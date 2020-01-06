@@ -5,4 +5,5 @@
     <string name="_1_hour_after_breakfast">1 hour after breakfast</string>
     <string name="_1_hour_after_dinner">1 hour after dinner</string>
     <string name="_1_hour_after_supper">1 hour after supper</string>
+    <string name="result">Result:</string>
 </resources>

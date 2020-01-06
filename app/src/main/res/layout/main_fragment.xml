@@ -32,25 +32,32 @@
             android:id="@+id/on_empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/on_empty_stomach"
-            />
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/on_empty_stomach" />
 
         <RadioButton
             android:id="@+id/breakfast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:text="@string/_1_hour_after_breakfast" />
 
         <RadioButton
             android:id="@+id/dinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:text="@string/_1_hour_after_dinner" />
 
         <RadioButton
             android:id="@+id/supper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:text="@string/_1_hour_after_supper" />
     </RadioGroup>
 
@@ -60,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorAccent"
         android:onClick="@{() -> mainModel.onSubmit()}"
@@ -79,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:ems="10"
@@ -86,6 +94,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/result"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/glucoseMeasurement"
+        app:layout_constraintEnd_toStartOf="@+id/glucoseMeasurement"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/glucoseMeasurement" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
