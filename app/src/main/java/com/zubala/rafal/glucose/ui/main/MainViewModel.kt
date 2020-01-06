@@ -21,6 +21,14 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
     val addMeasurementsEvent: LiveData<Boolean>
         get() = _addMeasurementsEvent
 
+    private var _snackbarEvent = MutableLiveData<String>()
+
+    val snackbarEvent: LiveData<String>
+        get() = _snackbarEvent
+
+    fun snackbarDone() {
+        _snackbarEvent.value = ""
+    }
 
     fun onSubmit() {
         Log.i("ViewModel", "Submit")
@@ -32,12 +40,18 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
     }
 
     fun sendMeasurements(data: String, type: Type) {
+        var row = -1
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val row = sheetsService.getRowByDate(sheets)
+                row = sheetsService.getRowByDate(sheets)
                 if (row > 0) {
                     sheetsService.insertValue(sheets, row, data, type)
                 }
+            }
+            if (row < 0) {
+                _snackbarEvent.value = "Can not find row"
+            } else {
+                _snackbarEvent.value = "New data at row: $row"
             }
         }
     }
