@@ -3,10 +3,12 @@ package com.zubala.rafal.glucose.ui.main
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -61,8 +63,11 @@ class MainFragment : Fragment() {
         viewModel.snackbarEvent.observe(this, androidx.lifecycle.Observer {
             if (it.isNotEmpty()) {
                 viewModel.snackbarDone()
-                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!,
-                    it, Snackbar.LENGTH_LONG)
+                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, it, Snackbar.LENGTH_LONG)
+                val view = snack.view
+                val params = view.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.TOP
+                view.layoutParams = params
                 snack.show()
                 binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
                 hideKeyboard()
