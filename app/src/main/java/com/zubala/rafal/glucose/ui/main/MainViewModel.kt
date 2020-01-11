@@ -21,13 +21,13 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
     val addMeasurementsEvent: LiveData<Boolean>
         get() = _addMeasurementsEvent
 
-    private var _snackbarEvent = MutableLiveData<String>()
+    private var _snackbarEvent = MutableLiveData<DataResult>()
 
-    val snackbarEvent: LiveData<String>
+    val snackbarEvent: LiveData<DataResult>
         get() = _snackbarEvent
 
     fun snackbarDone() {
-        _snackbarEvent.value = ""
+        _snackbarEvent.value = DataResult.EMPTY
     }
 
     fun onSubmit() {
@@ -50,16 +50,18 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
                 }
             }
             if (!result) {
-                _snackbarEvent.value = "ERROR: Value already exists!"
+                _snackbarEvent.value = DataResult.DATA_EXISTS
             } else {
                 if (row < 0) {
-                    _snackbarEvent.value = "Can not find row"
+                    _snackbarEvent.value = DataResult.NO_ROW
                 } else {
-                    _snackbarEvent.value = "New data at row: $row"
+                    _snackbarEvent.value = DataResult.NEW_DATA
                 }
             }
         }
     }
 }
+
+enum class DataResult {EMPTY, NO_ROW, NEW_DATA, DATA_EXISTS}
 
 enum class Type {ON_EMPTY, BREAKFAST, DINNER, SUPPER}

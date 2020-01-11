@@ -58,16 +58,16 @@ class MainFragment : Fragment() {
                 }
                 binding.submit.visibility = View.INVISIBLE
                 binding.progressBar.visibility = View.VISIBLE
-                binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
-                hideKeyboard()
+                binding.glucoseMeasurement.text.clear()
 
                 viewModel.doneSubmit()
+                hideKeyboard()
             }
         })
 
         viewModel.snackbarEvent.observe(this, androidx.lifecycle.Observer {
-            if (it.isNotEmpty()) {
-                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, it, Snackbar.LENGTH_LONG)
+            if (it != DataResult.EMPTY) {
+                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, getResultValue(it), Snackbar.LENGTH_LONG)
                 val view = snack.view
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.TOP
@@ -84,6 +84,18 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
 
         return binding.root
+    }
+
+    private fun getResultValue(it: DataResult?): String {
+        it?.let{
+            return when(it) {
+                DataResult.EMPTY -> ""
+                DataResult.NEW_DATA -> getString(R.string.new_data)
+                DataResult.DATA_EXISTS -> getString(R.string.data_exists)
+                DataResult.NO_ROW -> getString(R.string.no_row)
+            }
+        }
+        return ""
     }
 
     private fun hideKeyboard() {

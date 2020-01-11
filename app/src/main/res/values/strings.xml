@@ -6,4 +6,7 @@
     <string name="_1_hour_after_dinner">1 hour after dinner</string>
     <string name="_1_hour_after_supper">1 hour after supper</string>
     <string name="result">Result:</string>
+    <string name="data_exists">"ERROR: Value already exists!"</string>
+    <string name="new_data">"New data saved"</string>
+    <string name="no_row">"Can not find row"</string>
 </resources>
