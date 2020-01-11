@@ -40,18 +40,23 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
     }
 
     fun sendMeasurements(data: String, type: Type) {
-        var row = -1
+        var row: Int = -1
+        var result = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 row = sheetsService.getRowByDate(sheets)
                 if (row > 0) {
-                    sheetsService.insertValue(sheets, row, data, type)
+                    result = sheetsService.insertValue(sheets, row, data, type)
                 }
             }
-            if (row < 0) {
-                _snackbarEvent.value = "Can not find row"
+            if (!result) {
+                _snackbarEvent.value = "ERROR: Value already exists!"
             } else {
-                _snackbarEvent.value = "New data at row: $row"
+                if (row < 0) {
+                    _snackbarEvent.value = "Can not find row"
+                } else {
+                    _snackbarEvent.value = "New data at row: $row"
+                }
             }
         }
     }

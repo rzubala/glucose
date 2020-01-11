@@ -56,25 +56,27 @@ class MainFragment : Fragment() {
                 type?.let {
                     viewModel.sendMeasurements(binding.glucoseMeasurement.text.toString(), type)
                 }
-                binding.submit.visibility = View.GONE
+                binding.submit.visibility = View.INVISIBLE
                 binding.progressBar.visibility = View.VISIBLE
                 binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
                 hideKeyboard()
+
                 viewModel.doneSubmit()
             }
         })
 
         viewModel.snackbarEvent.observe(this, androidx.lifecycle.Observer {
             if (it.isNotEmpty()) {
-                viewModel.snackbarDone()
                 val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, it, Snackbar.LENGTH_LONG)
                 val view = snack.view
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.TOP
                 view.layoutParams = params
                 snack.show()
+                binding.progressBar.visibility = View.INVISIBLE
                 binding.submit.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
+
+                viewModel.snackbarDone()
             }
         })
 

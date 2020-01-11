@@ -44,21 +44,50 @@ class SpreadSheetService {
         return -1
     }
 
-    fun insertValue(sheets: Sheets, row: Int, data: String, type: Type) {
+    fun getValue(sheets: Sheets, range: String): String {
+        try {
+            val result: ValueRange = sheets.spreadsheets().values()
+                .get(SPREADSHEET_ID, range)
+                .execute()
+            Log.i("SpreadSheetService", result.toPrettyString())
+            result.getValues()?.let {
+                for (r in result.getValues()) {
+                    if (r.size > 1) {
+                        return r[1] as String
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+        }
+        return ""
+    }
+
+    fun insertValue(sheets: Sheets, row: Int, data: String, type: Type): Boolean {
         val date = getCurrentDateTime()
         val timeString = date.toString("HH:mm")
         try {
             val values: MutableList<List<Any>> = MutableList(1) { listOf(timeString, data) }
             val body: ValueRange = ValueRange().setValues(values)
             val range = getRange(type, row)
+
+            val oldValue = getValue(sheets, range)
+            Log.i("SpreadSheetService", "Old value: $oldValue")
+            if (oldValue.isNotEmpty()) {
+                return false
+            }
+
             val result: UpdateValuesResponse = sheets.spreadsheets().values().update(SPREADSHEET_ID, range, body)
                     .setValueInputOption(VALUE_INPUT_OPTION)
                     .execute()
             Log.i("SpreadSheetService", result.toPrettyString())
+            return true
         } catch (ex: UserRecoverableAuthIOException) {
             Log.e("SpreadSheetService", "UserRecoverableAuthIOException", ex)
+            return false
         } catch (e: IOException) {
             Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+            return false
         }
     }
 
