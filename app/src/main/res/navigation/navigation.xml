@@ -13,15 +13,29 @@
         <argument
             android:name="accountData"
             app:argType="com.zubala.rafal.glucose.ui.signin.AccountData" />
+        <action
+            android:id="@+id/action_mainFragment_to_dayResults"
+            app:destination="@id/dayResults" />
     </fragment>
 
     <fragment
         android:id="@+id/signinFragment"
         android:name="com.zubala.rafal.glucose.ui.signin.SigninFragment"
-        android:label="SigninFragment" >
+        android:label="SigninFragment"
+        tools:layout="@layout/signin_fragment" >
         <action
             android:id="@+id/action_pass_account"
             app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dayResults"
+        android:name="com.zubala.rafal.glucose.ui.results.DayResults"
+        android:label="DayResults"
+        tools:layout="@layout/day_result_fragment">
+        <argument
+            android:name="accountData"
+            app:argType="com.zubala.rafal.glucose.ui.signin.AccountData" />
     </fragment>
 
 </navigation>

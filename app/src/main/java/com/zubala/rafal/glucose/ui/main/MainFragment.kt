@@ -2,7 +2,6 @@ package com.zubala.rafal.glucose.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -19,11 +19,8 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
-import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
 import java.util.*
-import kotlin.time.hours
-
 
 class MainFragment : Fragment() {
 
@@ -77,6 +74,8 @@ class MainFragment : Fragment() {
                 binding.submit.visibility = View.VISIBLE
 
                 viewModel.snackbarDone()
+
+                //this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults(arguments.accountData))
             }
         })
 

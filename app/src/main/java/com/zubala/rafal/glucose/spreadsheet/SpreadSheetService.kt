@@ -10,8 +10,8 @@ import com.zubala.rafal.glucose.logic.toString
 import com.zubala.rafal.glucose.ui.main.Type
 import java.io.IOException
 
-//const val SPREADSHEET_ID = "18K6JOOSKQqWssptBUUdcSQF8kWpXTImBXiSRwXPyyuI"
-const val SPREADSHEET_ID = "1fLdEapcTUxaxoCN9YWW_LReRJJoQMbNR3bun4jQseDw"
+const val SPREADSHEET_ID = "18K6JOOSKQqWssptBUUdcSQF8kWpXTImBXiSRwXPyyuI"
+//const val SPREADSHEET_ID = "1fLdEapcTUxaxoCN9YWW_LReRJJoQMbNR3bun4jQseDw"
 const val SHEET_NAME = "pomiary"
 const val VALUE_INPUT_OPTION = "USER_ENTERED"
 const val DATE_ROW_START = 3

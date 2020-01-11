@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="header">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="common">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="time" parent="common">
+
+    </style>
+
+    <style name="result" parent="common">
+
+    </style>
+
 </resources>
