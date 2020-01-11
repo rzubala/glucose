@@ -56,6 +56,10 @@ class MainFragment : Fragment() {
                 type?.let {
                     viewModel.sendMeasurements(binding.glucoseMeasurement.text.toString(), type)
                 }
+                binding.submit.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
+                hideKeyboard()
                 viewModel.doneSubmit()
             }
         })
@@ -69,8 +73,8 @@ class MainFragment : Fragment() {
                 params.gravity = Gravity.TOP
                 view.layoutParams = params
                 snack.show()
-                binding.glucoseMeasurement.text = Editable.Factory.getInstance().newEditable("")
-                hideKeyboard()
+                binding.submit.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
         })
 
