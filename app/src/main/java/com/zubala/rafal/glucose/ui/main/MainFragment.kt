@@ -19,8 +19,10 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
+import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
 import java.util.*
+import kotlin.time.hours
 
 
 class MainFragment : Fragment() {
@@ -32,8 +34,6 @@ class MainFragment : Fragment() {
         val arguments = MainFragmentArgs.fromBundle(arguments!!)
         val viewModelFactory = MainViewModelFactory(openSheet(arguments.accountData))
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
-
-        binding.radioGroup.check(binding.onEmpty.id)
 
         viewModel.addMeasurementsEvent.observe(this, androidx.lifecycle.Observer {
             if (it) {
@@ -83,7 +83,30 @@ class MainFragment : Fragment() {
         binding.mainModel = viewModel
         binding.lifecycleOwner = this
 
+        handleGreetings(binding)
+
         return binding.root
+    }
+
+    private fun handleGreetings(binding: MainFragmentBinding) {
+        when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in 0..8 -> {
+                binding.greetings.text = getString(R.string.good_morning)
+                binding.radioGroup.check(binding.onEmpty.id)
+            }
+            in 9..12 -> {
+                binding.greetings.text = getString(R.string.good_morning)
+                binding.radioGroup.check(binding.breakfast.id)
+            }
+            in 13..17 -> {
+                binding.greetings.text = getString(R.string.good_afternoon)
+                binding.radioGroup.check(binding.dinner.id)
+            }
+            in 18..23 -> {
+                binding.greetings.text = getString(R.string.good_evening)
+                binding.radioGroup.check(binding.supper.id)
+            }
+        }
     }
 
     private fun getResultValue(it: DataResult?): String {

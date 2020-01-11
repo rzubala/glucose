@@ -9,4 +9,7 @@
     <string name="data_exists">"ERROR: Value already exists!"</string>
     <string name="new_data">"New data saved"</string>
     <string name="no_row">"Can not find row"</string>
+    <string name="good_morning">"Good morning!"</string>
+    <string name="good_afternoon">"Good afternoon!"</string>
+    <string name="good_evening">"Good evening!"</string>
 </resources>
