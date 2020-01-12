@@ -14,7 +14,8 @@ data class GlucoseDay (val onEmpty: GlucoseData, val breakfast: GlucoseData, val
             3 -> supper.time = time
         }
     }
-    fun setResult(part: Int, result: Int) {
+    fun setResult(part: Int, resultStr: String) {
+        val result = resultStr.toInt()
         when(part) {
             0 -> onEmpty.result = result
             1 -> breakfast.result = result
@@ -35,7 +36,7 @@ fun List<List<Any>>.toGlucose(): GlucoseDay {
         for (col in row) {
             when (isTime) {
                 true -> glucose.setTime(cnt, col as String)
-                else -> glucose.setResult(cnt, col as Int)
+                else -> glucose.setResult(cnt, col as String)
             }
             isTime = !isTime
             if (isTime) {

@@ -15,7 +15,8 @@
             app:argType="com.zubala.rafal.glucose.ui.signin.AccountData" />
         <action
             android:id="@+id/action_mainFragment_to_dayResults"
-            app:destination="@id/dayResults" />
+            app:destination="@id/dayResults"
+            app:popUpTo="@+id/navigation" />
     </fragment>
 
     <fragment
@@ -32,10 +33,6 @@
         android:id="@+id/dayResults"
         android:name="com.zubala.rafal.glucose.ui.results.DayResults"
         android:label="DayResults"
-        tools:layout="@layout/day_result_fragment">
-        <argument
-            android:name="accountData"
-            app:argType="com.zubala.rafal.glucose.ui.signin.AccountData" />
-    </fragment>
+        tools:layout="@layout/day_result_fragment"/>
 
 </navigation>

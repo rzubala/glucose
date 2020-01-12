@@ -80,7 +80,7 @@ class MainFragment : Fragment() {
 
                 viewModel.snackbarDone()
 
-                //this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults(arguments.accountData))
+                this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults())
             }
         })
 

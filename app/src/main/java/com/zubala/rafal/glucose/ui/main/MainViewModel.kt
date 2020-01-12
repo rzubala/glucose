@@ -6,15 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.api.services.sheets.v4.Sheets
-import com.zubala.rafal.glucose.spreadsheet.SpreadSheetService
+import com.zubala.rafal.glucose.spreadsheet.SpreadSheetServiceConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MainViewModel(private val sheets: Sheets) : ViewModel() {
+class MainViewModel(sheets: Sheets) : ViewModel() {
 
-    private val sheetsService = SpreadSheetService()
+    private val sheetsService = SpreadSheetServiceConfig.service(sheets)
 
     private var _addMeasurementsEvent = MutableLiveData<Boolean>()
 
@@ -44,9 +44,11 @@ class MainViewModel(private val sheets: Sheets) : ViewModel() {
         var result = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                row = sheetsService.getRowByDate(sheets)
-                if (row > 0) {
-                    result = sheetsService.insertValue(sheets, row, data, type)
+                sheetsService?.let {
+                    row = sheetsService.getRowByDate()
+                    if (row > 0) {
+                        result = sheetsService.insertValue(row, data, type)
+                    }
                 }
             }
             if (!result) {

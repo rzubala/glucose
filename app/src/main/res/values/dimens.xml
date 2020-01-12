@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="radio_padding">8dp</dimen>
+    <dimen name="time_padding">64dp</dimen>
+    <dimen name="time_padding_result">64dp</dimen>
+    <dimen name="result_top">16dp</dimen>
 </resources>

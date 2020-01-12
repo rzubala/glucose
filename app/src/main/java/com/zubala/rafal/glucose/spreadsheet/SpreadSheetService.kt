@@ -19,9 +19,9 @@ const val VALUE_INPUT_OPTION = "USER_ENTERED"
 const val DATE_ROW_START = 3
 const val LIMIT_ROWS = 250
 
-class SpreadSheetService {
+class SpreadSheetService(private val sheets: Sheets) {
 
-    fun getRowByDate(sheets: Sheets): Int {
+    fun getRowByDate(): Int {
         val date = getCurrentDateTime()
         val dateInString = date.toString("dd.MM.yyyy")
 
@@ -46,7 +46,7 @@ class SpreadSheetService {
         return -1
     }
 
-    fun getValue(sheets: Sheets, range: String): String {
+    fun getValue(range: String): String {
         try {
             val result: ValueRange = sheets.spreadsheets().values()
                 .get(SPREADSHEET_ID, range)
@@ -65,8 +65,8 @@ class SpreadSheetService {
         return ""
     }
 
-    fun getDayResults(sheets: Sheets): GlucoseDay {
-        val row = getRowByDate(sheets)
+    fun getDayResults(): GlucoseDay {
+        val row = getRowByDate()
         if (row < 0) {
             return GlucoseDay.empty()
         }
@@ -82,7 +82,7 @@ class SpreadSheetService {
         return GlucoseDay.empty()
     }
 
-    fun insertValue(sheets: Sheets, row: Int, data: String, type: Type): Boolean {
+    fun insertValue(row: Int, data: String, type: Type): Boolean {
         val date = getCurrentDateTime()
         val timeString = date.toString("HH:mm")
         try {
@@ -90,7 +90,7 @@ class SpreadSheetService {
             val body: ValueRange = ValueRange().setValues(values)
             val range = getRange(type, row)
 
-            val oldValue = getValue(sheets, range)
+            val oldValue = getValue(range)
             Log.i("SpreadSheetService", "Old value: $oldValue")
             if (oldValue.isNotEmpty()) {
                 return false
