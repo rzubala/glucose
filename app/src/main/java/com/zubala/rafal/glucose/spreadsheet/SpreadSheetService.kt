@@ -5,6 +5,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse
 import com.google.api.services.sheets.v4.model.ValueRange
+import com.zubala.rafal.glucose.domain.GlucoseDay
+import com.zubala.rafal.glucose.domain.toGlucose
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.logic.toString
 import com.zubala.rafal.glucose.ui.main.Type
@@ -61,6 +63,23 @@ class SpreadSheetService {
             Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
         }
         return ""
+    }
+
+    fun getDayResults(sheets: Sheets): GlucoseDay {
+        val row = getRowByDate(sheets)
+        if (row < 0) {
+            return GlucoseDay.empty()
+        }
+        try {
+            val result: ValueRange = sheets.spreadsheets().values()
+                .get(SPREADSHEET_ID, toRange("B", "I", row, row))
+                .execute()
+            Log.i("SpreadSheetService", result.toPrettyString())
+            return result.getValues()?.toGlucose() ?: GlucoseDay.empty()
+        } catch (e: IOException) {
+            Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+        }
+        return GlucoseDay.empty()
     }
 
     fun insertValue(sheets: Sheets, row: Int, data: String, type: Type): Boolean {

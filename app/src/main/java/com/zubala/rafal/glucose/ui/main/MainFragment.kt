@@ -29,7 +29,7 @@ class MainFragment : Fragment() {
             inflater, R.layout.main_fragment, container, false)
 
         val arguments = MainFragmentArgs.fromBundle(arguments!!)
-        val viewModelFactory = MainViewModelFactory(openSheet(arguments.accountData))
+        val viewModelFactory = MainViewModelFactory(openSheet(context!!, arguments.accountData))
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
 
         viewModel.addMeasurementsEvent.observe(this, androidx.lifecycle.Observer {
@@ -64,12 +64,17 @@ class MainFragment : Fragment() {
 
         viewModel.snackbarEvent.observe(this, androidx.lifecycle.Observer {
             if (it != DataResult.EMPTY) {
-                val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!, getResultValue(it), Snackbar.LENGTH_LONG)
-                val view = snack.view
-                val params = view.layoutParams as FrameLayout.LayoutParams
-                params.gravity = Gravity.TOP
-                view.layoutParams = params
-                snack.show()
+                val value = getResultValue(it)
+                if (value.isNotEmpty()) {
+                    val snack = Snackbar.make(activity?.findViewById(android.R.id.content)!!,
+                        value, Snackbar.LENGTH_LONG)
+                    val view = snack.view
+                    val params = view.layoutParams as FrameLayout.LayoutParams
+                    params.gravity = Gravity.TOP
+                    view.layoutParams = params
+                    snack.show()
+                }
+
                 binding.progressBar.visibility = View.INVISIBLE
                 binding.submit.visibility = View.VISIBLE
 
@@ -112,7 +117,7 @@ class MainFragment : Fragment() {
         it?.let{
             return when(it) {
                 DataResult.EMPTY -> ""
-                DataResult.NEW_DATA -> getString(R.string.new_data)
+                DataResult.NEW_DATA -> ""
                 DataResult.DATA_EXISTS -> getString(R.string.data_exists)
                 DataResult.NO_ROW -> getString(R.string.no_row)
             }
@@ -124,17 +129,18 @@ class MainFragment : Fragment() {
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
-
-    private fun openSheet(accountData: AccountData): Sheets {
-        val credential = GoogleAccountCredential.usingOAuth2(
-            context,
-            Collections.singleton("https://www.googleapis.com/auth/spreadsheets")
-        )
-        credential.selectedAccount = accountData.account.account
-        return Sheets.Builder(
-            AndroidHttp.newCompatibleTransport(),
-            JacksonFactory.getDefaultInstance(),
-            credential
-        ).build()
-    }
 }
+
+fun openSheet(context: Context, accountData: AccountData): Sheets {
+    val credential = GoogleAccountCredential.usingOAuth2(
+        context,
+        Collections.singleton("https://www.googleapis.com/auth/spreadsheets")
+    )
+    credential.selectedAccount = accountData.account.account
+    return Sheets.Builder(
+        AndroidHttp.newCompatibleTransport(),
+        JacksonFactory.getDefaultInstance(),
+        credential
+    ).build()
+}
+
