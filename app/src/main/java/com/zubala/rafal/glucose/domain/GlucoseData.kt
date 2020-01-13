@@ -15,7 +15,7 @@ data class GlucoseDay (val onEmpty: GlucoseData, val breakfast: GlucoseData, val
         }
     }
     fun setResult(part: Int, resultStr: String) {
-        val result = resultStr.toInt()
+        val result = if (resultStr.isEmpty())  0  else resultStr.toInt()
         when(part) {
             0 -> onEmpty.result = result
             1 -> breakfast.result = result
