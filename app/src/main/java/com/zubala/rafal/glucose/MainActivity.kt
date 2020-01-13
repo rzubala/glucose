@@ -21,6 +21,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         Distribute.setEnabled(true)
-        Distribute.setEnabledForDebuggableBuild(true)
+        Distribute.setEnabledForDebuggableBuild(false)
     }
 }

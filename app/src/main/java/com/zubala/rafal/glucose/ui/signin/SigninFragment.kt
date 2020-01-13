@@ -1,5 +1,6 @@
 package com.zubala.rafal.glucose.ui.signin
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -66,10 +67,20 @@ class SigninFragment : Fragment() {
     }
 
     private fun configureGoogleSignIn() {
-        mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestScopes(Scope("https://www.googleapis.com/auth/spreadsheets"))
-            .requestEmail()
-            .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(context!!, mGoogleSignInOptions)
+        mGoogleSignInOptions = buildGoogleSignInOptions()
+        mGoogleSignInClient = buildGoogleSignInClient(context!!, mGoogleSignInOptions)
+    }
+
+    companion object {
+        fun buildGoogleSignInOptions(): GoogleSignInOptions {
+            return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(Scope("https://www.googleapis.com/auth/spreadsheets"))
+                .requestEmail()
+                .build()
+        }
+
+        fun buildGoogleSignInClient(context: Context, options: GoogleSignInOptions): GoogleSignInClient {
+            return GoogleSignIn.getClient(context!!, options)
+        }
     }
 }

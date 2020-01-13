@@ -2,16 +2,18 @@ package com.zubala.rafal.glucose.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Status
 import com.google.android.material.snackbar.Snackbar
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -21,9 +23,14 @@ import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
+import com.zubala.rafal.glucose.ui.signin.SigninFragment
+import com.zubala.rafal.glucose.ui.signin.SigninFragmentDirections
 import java.util.*
 
+
 class MainFragment : Fragment() {
+
+    lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: MainFragmentBinding = DataBindingUtil.inflate(
@@ -130,6 +137,35 @@ class MainFragment : Fragment() {
     private fun hideKeyboard() {
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+    }
+
+    //enable options menu in this fragment
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+    //inflate the menu
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    //handle item clicks of menu
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        //get item id to handle item clicks
+        val id = item!!.itemId
+        //handle item clicks
+        if (id == R.id.action_settings){
+            //do your action here, im just showing toast
+            Toast.makeText(activity, "Settings", Toast.LENGTH_SHORT).show()
+        }
+        if (id == R.id.action_logout){
+            val mGoogleSignInOptions: GoogleSignInOptions =  SigninFragment.buildGoogleSignInOptions()
+            val mGoogleSignInClient: GoogleSignInClient = SigninFragment.buildGoogleSignInClient(context!!, mGoogleSignInOptions)
+            mGoogleSignInClient.signOut().addOnCompleteListener {
+                this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSigninFragment())
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 
