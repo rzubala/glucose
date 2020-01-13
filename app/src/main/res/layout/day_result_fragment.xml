@@ -128,17 +128,19 @@
             app:layout_constraintBottom_toBottomOf="@+id/header"
             app:layout_constraintEnd_toStartOf="@+id/header"
             app:layout_constraintTop_toTopOf="@+id/header"
-            app:srcCompat="@android:drawable/btn_minus" />
+            app:srcCompat="@drawable/arrow_back_black_36dp" />
 
         <ImageView
             android:id="@+id/plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+
+            android:foregroundTintMode="add"
             app:layout_constraintBottom_toBottomOf="@+id/header"
             app:layout_constraintStart_toEndOf="@+id/header"
             app:layout_constraintTop_toTopOf="@+id/header"
-            app:srcCompat="@android:drawable/btn_plus" />
+            app:srcCompat="@drawable/arrow_forward_black_36dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
