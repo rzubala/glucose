@@ -11,3 +11,10 @@ fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String 
 fun getCurrentDateTime(): Date {
     return Calendar.getInstance().time
 }
+
+fun addDay(date: Date, offset: Int): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, offset)
+    return cal.time
+}

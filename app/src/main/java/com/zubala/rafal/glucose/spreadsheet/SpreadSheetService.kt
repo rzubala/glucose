@@ -11,6 +11,7 @@ import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.logic.toString
 import com.zubala.rafal.glucose.ui.main.Type
 import java.io.IOException
+import java.util.*
 
 const val SPREADSHEET_ID = "18K6JOOSKQqWssptBUUdcSQF8kWpXTImBXiSRwXPyyuI"
 //const val SPREADSHEET_ID = "1fLdEapcTUxaxoCN9YWW_LReRJJoQMbNR3bun4jQseDw"
@@ -21,8 +22,7 @@ const val LIMIT_ROWS = 250
 
 class SpreadSheetService(private val sheets: Sheets) {
 
-    fun getRowByDate(): Int {
-        val date = getCurrentDateTime()
+    fun getRowByDate(date: Date = getCurrentDateTime()): Int {
         val dateInString = date.toString("dd.MM.yyyy")
 
         try {
@@ -65,8 +65,8 @@ class SpreadSheetService(private val sheets: Sheets) {
         return ""
     }
 
-    fun getDayResults(): GlucoseDay {
-        val row = getRowByDate()
+    fun getDayResults(date: Date): GlucoseDay {
+        val row = getRowByDate(date)
         if (row < 0) {
             return GlucoseDay.empty()
         }

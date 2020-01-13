@@ -33,6 +33,10 @@
         android:id="@+id/dayResults"
         android:name="com.zubala.rafal.glucose.ui.results.DayResults"
         android:label="DayResults"
-        tools:layout="@layout/day_result_fragment"/>
+        tools:layout="@layout/day_result_fragment">
+        <argument
+            android:name="date"
+            app:argType="java.util.Date" />
+    </fragment>
 
 </navigation>

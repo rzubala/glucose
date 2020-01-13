@@ -1,6 +1,5 @@
 package com.zubala.rafal.glucose.ui.results
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.DayResultFragmentBinding
-import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.logic.toString
 
 class DayResults : Fragment() {
@@ -23,33 +21,42 @@ class DayResults : Fragment() {
             inflater, R.layout.day_result_fragment, container, false
         )
 
-        binding.header.text = getString(R.string.results) + " " + getCurrentDateTime().toString("dd.MM.yyyy")
-
+        val date = DayResultsArgs.fromBundle(arguments!!).date
         val viewModel = ViewModelProviders.of(this).get(DayResultsViewModel::class.java)
+        viewModel.date = date
+        binding.viewModel = viewModel
         viewModel.getResults()
+
+        binding.plus.setOnClickListener { viewModel.onPlus() }
+        binding.minus.setOnClickListener { viewModel.onMinus() }
 
         viewModel.resultEvent.observe(this, Observer {
             it?.let {
                 Log.i("DayResults", it.toString())
+                binding.header.text = getString(R.string.results) + " " + viewModel.date.toString("dd.MM.yyyy")
 
+                reset(binding.onEmptyTime, binding.onEmptyResult)                
                 if (it.onEmpty.result > 0) {
                     binding.onEmptyTime.text = it.onEmpty.time
                     binding.onEmptyResult.text = it.onEmpty.result.toString()
                     markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
                 }
 
+                reset(binding.breakfastTime, binding.breakfastResult)
                 if (it.breakfast.result > 0) {
                     binding.breakfastTime.text = it.breakfast.time
                     binding.breakfastResult.text = it.breakfast.result.toString()
                     markResult(binding.breakfastResult, it.breakfast.result, AFTER_1H_LIMIT)
                 }
 
+                reset(binding.dinnerTime, binding.dinnerResult)
                 if (it.dinner.result > 0) {
                     binding.dinnerTime.text = it.dinner.time
                     binding.dinnerResult.text = it.dinner.result.toString()
                     markResult(binding.dinnerResult, it.dinner.result, AFTER_1H_LIMIT)
                 }
 
+                reset(binding.supperTime, binding.supperResult)
                 if (it.supper.result > 0) {
                     binding.supperTime.text = it.supper.time
                     binding.supperResult.text = it.supper.result.toString()
@@ -61,6 +68,16 @@ class DayResults : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun reset(time: TextView?, result: TextView?) {
+        time?.let {
+            time.text = "-"
+        }
+        result?.let {
+            result.text = "-"
+            result.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
+        }
     }
 
     private fun markResult(view: TextView?, result: Int, limit: Int) {

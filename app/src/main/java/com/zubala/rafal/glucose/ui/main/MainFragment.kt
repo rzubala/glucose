@@ -19,6 +19,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
+import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
 import java.util.*
 
@@ -80,7 +81,8 @@ class MainFragment : Fragment() {
 
                 viewModel.snackbarDone()
 
-                this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults())
+                this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults(
+                    getCurrentDateTime()))
             }
         })
 
