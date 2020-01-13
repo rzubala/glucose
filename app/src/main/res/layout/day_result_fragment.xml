@@ -22,14 +22,14 @@
 
         <TextView
             android:id="@+id/on_empty_time"
-            android:layout_width="wrap_content"
+            style="@style/time"
+            android:layout_width="@dimen/time_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/time_padding"
-            style="@style/time"
-            tools:text="08:00"
             app:layout_constraintBottom_toBottomOf="@+id/on_empty_result"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/on_empty_result" />
+            app:layout_constraintTop_toTopOf="@+id/on_empty_result"
+            tools:text="08:00" />
 
         <TextView
             android:id="@+id/on_empty_result"
@@ -44,11 +44,12 @@
 
         <TextView
             android:id="@+id/breakfast_time"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/time_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/time_padding"
             style="@style/time"
             tools:text="09:00"
+            android:text="-"
             app:layout_constraintBottom_toBottomOf="@+id/breakfast_result"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/breakfast_result" />
@@ -61,16 +62,18 @@
             android:layout_marginTop="@dimen/result_top"
             style="@style/result"
             tools:text="140"
+            android:text="-"
             app:layout_constraintStart_toEndOf="@+id/breakfast_time"
             app:layout_constraintTop_toBottomOf="@+id/on_empty_time" />
 
         <TextView
             android:id="@+id/dinner_time"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/time_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/time_padding"
             style="@style/time"
             tools:text="14:00"
+            android:text="-"
             app:layout_constraintBottom_toBottomOf="@+id/dinner_result"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/dinner_result" />
@@ -83,16 +86,18 @@
             android:layout_marginTop="@dimen/result_top"
             style="@style/result"
             tools:text="141"
+            android:text="-"
             app:layout_constraintStart_toEndOf="@+id/dinner_time"
             app:layout_constraintTop_toBottomOf="@+id/breakfast_time" />
 
         <TextView
             android:id="@+id/supper_time"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/time_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/time_padding"
             style="@style/time"
             tools:text="19:00"
+            android:text="-"
             app:layout_constraintBottom_toBottomOf="@+id/supper_result"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/supper_result" />
@@ -105,6 +110,7 @@
             android:layout_marginTop="@dimen/result_top"
             style="@style/result"
             tools:text="142"
+            android:text="-"
             app:layout_constraintStart_toEndOf="@+id/supper_time"
             app:layout_constraintTop_toBottomOf="@+id/dinner_time" />
 

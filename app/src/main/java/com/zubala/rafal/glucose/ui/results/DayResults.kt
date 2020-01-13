@@ -32,21 +32,29 @@ class DayResults : Fragment() {
             it?.let {
                 Log.i("DayResults", it.toString())
 
-                binding.onEmptyTime.text = it.onEmpty.time
-                binding.onEmptyResult.text = it.onEmpty.result.toString()
-                markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
+                if (it.onEmpty.result > 0) {
+                    binding.onEmptyTime.text = it.onEmpty.time
+                    binding.onEmptyResult.text = it.onEmpty.result.toString()
+                    markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
+                }
 
-                binding.breakfastTime.text = it.breakfast.time
-                binding.breakfastResult.text = it.breakfast.result.toString()
-                markResult(binding.breakfastResult, it.breakfast.result, AFTER_1H_LIMIT)
+                if (it.breakfast.result > 0) {
+                    binding.breakfastTime.text = it.breakfast.time
+                    binding.breakfastResult.text = it.breakfast.result.toString()
+                    markResult(binding.breakfastResult, it.breakfast.result, AFTER_1H_LIMIT)
+                }
 
-                binding.dinnerTime.text = it.dinner.time
-                binding.dinnerResult.text = it.dinner.result.toString()
-                markResult(binding.dinnerResult, it.dinner.result, AFTER_1H_LIMIT)
+                if (it.dinner.result > 0) {
+                    binding.dinnerTime.text = it.dinner.time
+                    binding.dinnerResult.text = it.dinner.result.toString()
+                    markResult(binding.dinnerResult, it.dinner.result, AFTER_1H_LIMIT)
+                }
 
-                binding.supperTime.text = it.supper.time
-                binding.supperResult.text = it.supper.result.toString()
-                markResult(binding.supperResult, it.supper.result, AFTER_1H_LIMIT)
+                if (it.supper.result > 0) {
+                    binding.supperTime.text = it.supper.time
+                    binding.supperResult.text = it.supper.result.toString()
+                    markResult(binding.supperResult, it.supper.result, AFTER_1H_LIMIT)
+                }
 
                 viewModel.doneResults()
             }
