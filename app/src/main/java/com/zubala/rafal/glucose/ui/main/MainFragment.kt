@@ -10,10 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Status
 import com.google.android.material.snackbar.Snackbar
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -24,13 +22,9 @@ import com.zubala.rafal.glucose.databinding.MainFragmentBinding
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
 import com.zubala.rafal.glucose.ui.signin.SigninFragment
-import com.zubala.rafal.glucose.ui.signin.SigninFragmentDirections
 import java.util.*
 
-
 class MainFragment : Fragment() {
-
-    lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: MainFragmentBinding = DataBindingUtil.inflate(
@@ -129,6 +123,7 @@ class MainFragment : Fragment() {
                 DataResult.NEW_DATA -> ""
                 DataResult.DATA_EXISTS -> getString(R.string.data_exists)
                 DataResult.NO_ROW -> getString(R.string.no_row)
+                DataResult.SHOW_RESULTS -> ""
             }
         }
         return ""

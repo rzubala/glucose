@@ -28,8 +28,16 @@ class DayResultsViewModel : ViewModel() {
     val resultEvent: LiveData<GlucoseDay?>
         get() = _resultEvent
 
+    private var _showProgressEvent = MutableLiveData<Boolean>()
+    val showProgressEvent: LiveData<Boolean>
+        get() = _showProgressEvent
+
+    fun doneShowProgressEvent() {
+        _showProgressEvent.value = false
+    }
 
     fun getResults() {
+        _showProgressEvent.value = true
         viewModelScope.launch {
             var results: GlucoseDay? = null
             withContext(Dispatchers.IO) {

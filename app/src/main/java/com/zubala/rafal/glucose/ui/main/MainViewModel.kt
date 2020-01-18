@@ -35,6 +35,11 @@ class MainViewModel(sheets: Sheets) : ViewModel() {
         _addMeasurementsEvent.value = true
     }
 
+    fun onResults() {
+        Log.i("ViewModel", "Results")
+        _snackbarEvent.value = DataResult.SHOW_RESULTS
+    }
+
     fun doneSubmit() {
         _addMeasurementsEvent.value = false
     }
@@ -64,6 +69,6 @@ class MainViewModel(sheets: Sheets) : ViewModel() {
     }
 }
 
-enum class DataResult {EMPTY, NO_ROW, NEW_DATA, DATA_EXISTS}
+enum class DataResult {EMPTY, NO_ROW, NEW_DATA, DATA_EXISTS, SHOW_RESULTS}
 
 enum class Type {ON_EMPTY, BREAKFAST, DINNER, SUPPER}

@@ -30,39 +30,48 @@ class DayResults : Fragment() {
         binding.plus.setOnClickListener { viewModel.onPlus() }
         binding.minus.setOnClickListener { viewModel.onMinus() }
 
+        viewModel.showProgressEvent.observe(this, Observer {
+            if (it) {
+                binding.resultsProgressBar.visibility = View.VISIBLE
+                binding.header.text = ""
+                reset(binding.onEmptyTime, binding.onEmptyResult)
+                reset(binding.breakfastTime, binding.breakfastResult)
+                reset(binding.dinnerTime, binding.dinnerResult)
+                reset(binding.supperTime, binding.supperResult)
+                viewModel.doneShowProgressEvent()
+            }
+        })
+
         viewModel.resultEvent.observe(this, Observer {
             it?.let {
                 Log.i("DayResults", it.toString())
                 binding.header.text = getString(R.string.results) + " " + viewModel.date.toString("dd.MM.yyyy")
 
-                reset(binding.onEmptyTime, binding.onEmptyResult)                
                 if (it.onEmpty.result > 0) {
                     binding.onEmptyTime.text = it.onEmpty.time
                     binding.onEmptyResult.text = it.onEmpty.result.toString()
                     markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
                 }
 
-                reset(binding.breakfastTime, binding.breakfastResult)
                 if (it.breakfast.result > 0) {
                     binding.breakfastTime.text = it.breakfast.time
                     binding.breakfastResult.text = it.breakfast.result.toString()
                     markResult(binding.breakfastResult, it.breakfast.result, AFTER_1H_LIMIT)
                 }
 
-                reset(binding.dinnerTime, binding.dinnerResult)
                 if (it.dinner.result > 0) {
                     binding.dinnerTime.text = it.dinner.time
                     binding.dinnerResult.text = it.dinner.result.toString()
                     markResult(binding.dinnerResult, it.dinner.result, AFTER_1H_LIMIT)
                 }
 
-                reset(binding.supperTime, binding.supperResult)
-                if (it.supper.result > 0) {
+               if (it.supper.result > 0) {
                     binding.supperTime.text = it.supper.time
                     binding.supperResult.text = it.supper.result.toString()
                     markResult(binding.supperResult, it.supper.result, AFTER_1H_LIMIT)
                 }
 
+                binding.resultsProgressBar.visibility = View.INVISIBLE
                 viewModel.doneResults()
             }
         })
