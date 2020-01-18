@@ -76,7 +76,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:text="@string/submit"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimaryDark"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
