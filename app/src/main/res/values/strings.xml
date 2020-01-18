@@ -15,4 +15,5 @@
     <string name="results">Results</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
+    <string name="welcome">To continue please login to your Google account</string>
 </resources>
