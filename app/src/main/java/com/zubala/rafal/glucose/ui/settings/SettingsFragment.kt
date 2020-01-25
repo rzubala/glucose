@@ -13,18 +13,28 @@ import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.account.GoogleAccountConfig
 import com.zubala.rafal.glucose.databinding.SettingsFragmentBinding
 
+const val PREFS_FILENAME = "com.zubala.rafal.glucose.prefs"
+const val SPREADSHEET_ID_KEY = "spreadsheet_id_key"
+
 class SettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: SettingsFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.settings_fragment, container, false)
+
+        val prefs = this.activity!!.getSharedPreferences(PREFS_FILENAME, 0)
 
         val viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
 
         viewModel.savedEvent.observe(this, Observer {
             if (it) {
+                val editor = prefs!!.edit()
+                editor.putString(SPREADSHEET_ID_KEY, binding.spreadsheetId.text.toString())
+                editor.apply()
                 this.findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToMainFragment(GoogleAccountConfig.account(null)!!))
                 viewModel.onSaved()
             }
         })
+
+        binding.spreadsheetId.setText(prefs.getString(SPREADSHEET_ID_KEY, ""))
 
         binding.settingsModel = viewModel
         binding.lifecycleOwner = this

@@ -145,14 +145,11 @@ class MainFragment : Fragment() {
         inflater!!.inflate(R.menu.main_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
     //handle item clicks of menu
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        //get item id to handle item clicks
         val id = item!!.itemId
-        //handle item clicks
         if (id == R.id.action_settings){
-            //do your action here, im just showing toast
-            Toast.makeText(activity, "Settings", Toast.LENGTH_SHORT).show()
             this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingsFragment())
         }
         if (id == R.id.action_logout){
