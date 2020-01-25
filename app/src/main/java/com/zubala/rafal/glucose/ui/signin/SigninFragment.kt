@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.zubala.rafal.glucose.R
+import com.zubala.rafal.glucose.account.GoogleAccountConfig
 import com.zubala.rafal.glucose.databinding.SigninFragmentBinding
 
 class SigninFragment : Fragment() {
@@ -46,6 +47,7 @@ class SigninFragment : Fragment() {
             // use the already signed in account
             val account = GoogleSignIn.getLastSignedInAccount(context)
             Log.i("SigninFragment", "already signed: ${account?.account?.name}")
+            GoogleAccountConfig.account(account)
             this.findNavController().navigate(SigninFragmentDirections.actionPassAccount(AccountData(account!!)))
         }
         return binding.root

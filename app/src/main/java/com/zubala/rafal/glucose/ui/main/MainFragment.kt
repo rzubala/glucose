@@ -18,6 +18,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.zubala.rafal.glucose.R
+import com.zubala.rafal.glucose.account.GoogleAccountConfig
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
 import com.zubala.rafal.glucose.ui.signin.AccountData
@@ -157,6 +158,7 @@ class MainFragment : Fragment() {
             val mGoogleSignInOptions: GoogleSignInOptions =  SigninFragment.buildGoogleSignInOptions()
             val mGoogleSignInClient: GoogleSignInClient = SigninFragment.buildGoogleSignInClient(context!!, mGoogleSignInOptions)
             mGoogleSignInClient.signOut().addOnCompleteListener {
+                GoogleAccountConfig.logout()
                 this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSigninFragment())
             }
         }
