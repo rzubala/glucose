@@ -153,6 +153,7 @@ class MainFragment : Fragment() {
         if (id == R.id.action_settings){
             //do your action here, im just showing toast
             Toast.makeText(activity, "Settings", Toast.LENGTH_SHORT).show()
+            this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingsFragment())
         }
         if (id == R.id.action_logout){
             val mGoogleSignInOptions: GoogleSignInOptions =  SigninFragment.buildGoogleSignInOptions()
