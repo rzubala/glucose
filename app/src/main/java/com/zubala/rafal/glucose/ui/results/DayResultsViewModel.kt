@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-const val ON_EMPTY_LIMIT = 90
+const val ON_EMPTY_WARNING = 90
+
+const val ON_EMPTY_LIMIT = 96
 
 const val AFTER_1H_LIMIT = 140
 

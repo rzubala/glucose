@@ -50,7 +50,7 @@ class DayResults : Fragment() {
                 if (it.onEmpty.result > 0) {
                     binding.onEmptyTime.text = it.onEmpty.time
                     binding.onEmptyResult.text = it.onEmpty.result.toString()
-                    markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
+                    markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT, ON_EMPTY_WARNING)
                 }
 
                 if (it.breakfast.result > 0) {
@@ -89,10 +89,14 @@ class DayResults : Fragment() {
         }
     }
 
-    private fun markResult(view: TextView?, result: Int, limit: Int) {
+    private fun markResult(view: TextView?, result: Int, limit: Int, warning: Int = 0) {
         view?.let {
             if (result <= limit) {
-                view.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                if (warning > 0 && result > warning && result <= limit) {
+                    view.setTextColor(ContextCompat.getColor(context!!, R.color.yellow))
+                } else {
+                    view.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                }
             } else {
                 view.setTextColor(ContextCompat.getColor(context!!, R.color.red))
             }
