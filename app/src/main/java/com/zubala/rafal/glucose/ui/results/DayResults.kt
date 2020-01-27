@@ -1,5 +1,7 @@
 package com.zubala.rafal.glucose.ui.results
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.DayResultFragmentBinding
 import com.zubala.rafal.glucose.logic.toString
+import com.zubala.rafal.glucose.spreadsheet.SPREADSHEET_ID
+
 
 class DayResults : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,6 +33,16 @@ class DayResults : Fragment() {
 
         binding.plus.setOnClickListener { viewModel.onPlus() }
         binding.minus.setOnClickListener { viewModel.onMinus() }
+
+        viewModel.showSpreadsheetEvent.observe(this, Observer {
+            if (it) {
+                val url = "https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=0"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                startActivity(intent)
+                viewModel.doneSpreadsheetShow()
+            }
+        })
 
         viewModel.showProgressEvent.observe(this, Observer {
             if (it) {

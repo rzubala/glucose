@@ -34,6 +34,11 @@ class DayResultsViewModel : ViewModel() {
     val showProgressEvent: LiveData<Boolean>
         get() = _showProgressEvent
 
+    private var _showSpreadsheetEvent = MutableLiveData<Boolean>()
+    val showSpreadsheetEvent: LiveData<Boolean>
+        get() = _showSpreadsheetEvent
+
+
     fun doneShowProgressEvent() {
         _showProgressEvent.value = false
     }
@@ -63,5 +68,13 @@ class DayResultsViewModel : ViewModel() {
     fun onPlus() {
         date = addDay(date, 1)
         getResults()
+    }
+
+    fun onSpreadsheetShow() {
+        _showSpreadsheetEvent.value = true
+    }
+
+    fun doneSpreadsheetShow() {
+        _showSpreadsheetEvent.value = false
     }
 }
