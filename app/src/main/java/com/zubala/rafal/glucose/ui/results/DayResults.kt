@@ -1,5 +1,7 @@
 package com.zubala.rafal.glucose.ui.results
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.DayResultFragmentBinding
 import com.zubala.rafal.glucose.logic.toString
+import com.zubala.rafal.glucose.spreadsheet.SPREADSHEET_ID
+
 
 class DayResults : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,6 +33,16 @@ class DayResults : Fragment() {
 
         binding.plus.setOnClickListener { viewModel.onPlus() }
         binding.minus.setOnClickListener { viewModel.onMinus() }
+
+        viewModel.showSpreadsheetEvent.observe(this, Observer {
+            if (it) {
+                val url = "https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=0"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                startActivity(intent)
+                viewModel.doneSpreadsheetShow()
+            }
+        })
 
         viewModel.showProgressEvent.observe(this, Observer {
             if (it) {
@@ -50,7 +64,7 @@ class DayResults : Fragment() {
                 if (it.onEmpty.result > 0) {
                     binding.onEmptyTime.text = it.onEmpty.time
                     binding.onEmptyResult.text = it.onEmpty.result.toString()
-                    markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT)
+                    markResult(binding.onEmptyResult, it.onEmpty.result, ON_EMPTY_LIMIT, ON_EMPTY_WARNING)
                 }
 
                 if (it.breakfast.result > 0) {
@@ -89,10 +103,14 @@ class DayResults : Fragment() {
         }
     }
 
-    private fun markResult(view: TextView?, result: Int, limit: Int) {
+    private fun markResult(view: TextView?, result: Int, limit: Int, warning: Int = 0) {
         view?.let {
             if (result <= limit) {
-                view.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                if (warning > 0 && result > warning && result <= limit) {
+                    view.setTextColor(ContextCompat.getColor(context!!, R.color.yellow))
+                } else {
+                    view.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                }
             } else {
                 view.setTextColor(ContextCompat.getColor(context!!, R.color.red))
             }

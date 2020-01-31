@@ -18,4 +18,5 @@
     <string name="welcome">To continue please login to your Google account</string>
     <string name="spreadsheet_id">Spreadsheet ID:</string>
     <string name="save">Save</string>
+    <string name="spreadsheet">Spreadsheet</string>
 </resources>
