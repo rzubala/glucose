@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -21,6 +20,7 @@ import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.account.GoogleAccountConfig
 import com.zubala.rafal.glucose.databinding.MainFragmentBinding
 import com.zubala.rafal.glucose.logic.getCurrentDateTime
+import com.zubala.rafal.glucose.ui.settings.getSpreadsheetUrl
 import com.zubala.rafal.glucose.ui.signin.AccountData
 import com.zubala.rafal.glucose.ui.signin.SigninFragment
 import java.util.*
@@ -34,6 +34,12 @@ class MainFragment : Fragment() {
         val arguments = MainFragmentArgs.fromBundle(arguments!!)
         val viewModelFactory = MainViewModelFactory(openSheet(context!!, arguments.accountData))
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+
+        val spreadsheetUrl = getSpreadsheetUrl(this.activity!!)
+        if (spreadsheetUrl.isNullOrEmpty()) {
+            this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToSettingsFragment())
+        }
+        viewModel.applySpreadsheetId(spreadsheetUrl ?: "")
 
         viewModel.addMeasurementsEvent.observe(this, androidx.lifecycle.Observer {
             if (it) {
@@ -83,8 +89,13 @@ class MainFragment : Fragment() {
 
                 viewModel.snackbarDone()
 
-                this.findNavController().navigate(MainFragmentDirections.actionMainFragmentToDayResults(
-                    getCurrentDateTime()))
+                if (it != DataResult.SPREADSHEET_EXCEPTION) {
+                    this.findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToDayResults(
+                            getCurrentDateTime()
+                        )
+                    )
+                }
             }
         })
 
@@ -125,6 +136,7 @@ class MainFragment : Fragment() {
                 DataResult.DATA_EXISTS -> getString(R.string.data_exists)
                 DataResult.NO_ROW -> getString(R.string.no_row)
                 DataResult.SHOW_RESULTS -> ""
+                DataResult.SPREADSHEET_EXCEPTION -> getString(R.string.spreadsheet_not_exists)
             }
         }
         return ""

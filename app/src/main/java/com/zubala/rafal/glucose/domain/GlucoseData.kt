@@ -2,9 +2,10 @@ package com.zubala.rafal.glucose.domain
 
 data class GlucoseData (var time: String = "", var result: Int = 0)
 
-data class GlucoseDay (val onEmpty: GlucoseData, val breakfast: GlucoseData, val dinner: GlucoseData, val supper: GlucoseData) {
+data class GlucoseDay (val onEmpty: GlucoseData, val breakfast: GlucoseData, val dinner: GlucoseData, val supper: GlucoseData, var error: Boolean = false) {
     companion object {
         fun empty() = GlucoseDay(GlucoseData(), GlucoseData(), GlucoseData(), GlucoseData())
+        fun error() = empty().apply { error = true }
     }
     fun setTime(part: Int, time: String) {
         when(part) {

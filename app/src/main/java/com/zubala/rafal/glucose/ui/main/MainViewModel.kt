@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.api.services.sheets.v4.Sheets
+import com.zubala.rafal.glucose.spreadsheet.SPREADSHEET_EXCEPTION_ROW
 import com.zubala.rafal.glucose.spreadsheet.SpreadSheetServiceConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,12 @@ class MainViewModel(sheets: Sheets) : ViewModel() {
 
     val snackbarEvent: LiveData<DataResult>
         get() = _snackbarEvent
+
+    fun applySpreadsheetId(spreadsheetId: String) {
+        sheetsService?.let {
+            it.spreadsheetId = spreadsheetId
+        }
+    }
 
     fun snackbarDone() {
         _snackbarEvent.value = DataResult.EMPTY
@@ -57,7 +64,11 @@ class MainViewModel(sheets: Sheets) : ViewModel() {
                 }
             }
             if (!result) {
-                _snackbarEvent.value = DataResult.DATA_EXISTS
+                if (row == SPREADSHEET_EXCEPTION_ROW) {
+                    _snackbarEvent.value = DataResult.SPREADSHEET_EXCEPTION
+                } else {
+                    _snackbarEvent.value = DataResult.DATA_EXISTS
+                }
             } else {
                 if (row < 0) {
                     _snackbarEvent.value = DataResult.NO_ROW
@@ -69,6 +80,6 @@ class MainViewModel(sheets: Sheets) : ViewModel() {
     }
 }
 
-enum class DataResult {EMPTY, NO_ROW, NEW_DATA, DATA_EXISTS, SHOW_RESULTS}
+enum class DataResult {EMPTY, NO_ROW, NEW_DATA, DATA_EXISTS, SHOW_RESULTS, SPREADSHEET_EXCEPTION}
 
 enum class Type {ON_EMPTY, BREAKFAST, DINNER, SUPPER}

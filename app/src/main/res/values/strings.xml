@@ -19,4 +19,6 @@
     <string name="spreadsheet_id">Spreadsheet ID:</string>
     <string name="save">Save</string>
     <string name="spreadsheet">Spreadsheet</string>
+    <string name="insert_spreadsheet_id">Please enter google spreadsheet ID</string>
+    <string name="spreadsheet_not_exists">Google spreadsheet does not exist! Please correct ID in Application Settings.</string>
 </resources>

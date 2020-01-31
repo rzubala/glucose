@@ -13,11 +13,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.zubala.rafal.glucose.R
 import com.zubala.rafal.glucose.databinding.DayResultFragmentBinding
 import com.zubala.rafal.glucose.logic.toString
-import com.zubala.rafal.glucose.spreadsheet.SPREADSHEET_ID
-
+import com.zubala.rafal.glucose.ui.settings.getSpreadsheetUrl
 
 class DayResults : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,9 +34,10 @@ class DayResults : Fragment() {
         binding.plus.setOnClickListener { viewModel.onPlus() }
         binding.minus.setOnClickListener { viewModel.onMinus() }
 
+        val spreadsheetUrl = getSpreadsheetUrl(this.activity!!)
         viewModel.showSpreadsheetEvent.observe(this, Observer {
             if (it) {
-                val url = "https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit#gid=0"
+                val url = "https://docs.google.com/spreadsheets/d/$spreadsheetUrl/edit#gid=0"
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
                 startActivity(intent)
@@ -83,6 +84,10 @@ class DayResults : Fragment() {
                     binding.supperTime.text = it.supper.time
                     binding.supperResult.text = it.supper.result.toString()
                     markResult(binding.supperResult, it.supper.result, AFTER_1H_LIMIT)
+                }
+
+                if (it.error) {
+                    Snackbar.make(activity?.findViewById(android.R.id.content)!!, getString(R.string.spreadsheet_not_exists), Snackbar.LENGTH_LONG).show()
                 }
 
                 binding.resultsProgressBar.visibility = View.INVISIBLE

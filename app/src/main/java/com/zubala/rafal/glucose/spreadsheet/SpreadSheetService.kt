@@ -13,43 +13,49 @@ import com.zubala.rafal.glucose.ui.main.Type
 import java.io.IOException
 import java.util.*
 
-const val SPREADSHEET_ID = "18K6JOOSKQqWssptBUUdcSQF8kWpXTImBXiSRwXPyyuI"
-//const val SPREADSHEET_ID = "1fLdEapcTUxaxoCN9YWW_LReRJJoQMbNR3bun4jQseDw"
-const val SHEET_NAME = "pomiary"
+const val SHEET_NAME = "glucose"
 const val VALUE_INPUT_OPTION = "USER_ENTERED"
 const val DATE_ROW_START = 3
 const val LIMIT_ROWS = 250
+const val ROW_NOT_FOUND = -1
+const val SPREADSHEET_EXCEPTION_ROW = -10
 
-class SpreadSheetService(private val sheets: Sheets) {
+class SpreadSheetService(private val sheets: Sheets, var spreadsheetId: String = "") {
 
     fun getRowByDate(date: Date = getCurrentDateTime()): Int {
         val dateInString = date.toString("dd.MM.yyyy")
 
         try {
             val result: ValueRange = sheets.spreadsheets().values()
-                .get(SPREADSHEET_ID, toRange("A", "A", DATE_ROW_START, DATE_ROW_START + LIMIT_ROWS))
+                .get(spreadsheetId, toRange("A", "A", DATE_ROW_START, DATE_ROW_START + LIMIT_ROWS))
                 .execute()
             Log.i("SpreadSheetService", result.toPrettyString())
             var cnt = 0
+            var found = false
             for (r in result.getValues()) {
                 if (r.isNotEmpty() && dateInString == r[0]) {
+                    found = true
                     break
                 }
                 cnt++
             }
+            if (!found) {
+                return ROW_NOT_FOUND
+            }
             return DATE_ROW_START + cnt
         } catch (ex: UserRecoverableAuthIOException) {
             Log.e("SpreadSheetService", "UserRecoverableAuthIOException", ex)
+            return SPREADSHEET_EXCEPTION_ROW
         } catch (e: IOException) {
             Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+            return SPREADSHEET_EXCEPTION_ROW
         }
-        return -1
     }
 
     fun getValue(range: String): String {
         try {
             val result: ValueRange = sheets.spreadsheets().values()
-                .get(SPREADSHEET_ID, range)
+                .get(spreadsheetId, range)
                 .execute()
             Log.i("SpreadSheetService", result.toPrettyString())
             result.getValues()?.let {
@@ -68,18 +74,18 @@ class SpreadSheetService(private val sheets: Sheets) {
     fun getDayResults(date: Date): GlucoseDay {
         val row = getRowByDate(date)
         if (row < 0) {
-            return GlucoseDay.empty()
+            return GlucoseDay.error()
         }
-        try {
+        return try {
             val result: ValueRange = sheets.spreadsheets().values()
-                .get(SPREADSHEET_ID, toRange("B", "I", row, row))
+                .get(spreadsheetId, toRange("B", "I", row, row))
                 .execute()
             Log.i("SpreadSheetService", result.toPrettyString())
-            return result.getValues()?.toGlucose() ?: GlucoseDay.empty()
+            result.getValues()?.toGlucose() ?: GlucoseDay.empty()
         } catch (e: IOException) {
             Log.e("SpreadSheetService", "failure to get spreadsheet: ", e)
+            GlucoseDay.error()
         }
-        return GlucoseDay.empty()
     }
 
     fun insertValue(row: Int, data: String, type: Type): Boolean {
@@ -96,7 +102,7 @@ class SpreadSheetService(private val sheets: Sheets) {
                 return false
             }
 
-            val result: UpdateValuesResponse = sheets.spreadsheets().values().update(SPREADSHEET_ID, range, body)
+            val result: UpdateValuesResponse = sheets.spreadsheets().values().update(spreadsheetId, range, body)
                     .setValueInputOption(VALUE_INPUT_OPTION)
                     .execute()
             Log.i("SpreadSheetService", result.toPrettyString())
